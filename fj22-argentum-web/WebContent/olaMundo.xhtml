@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html">
+	<!-- considere xmlns:h como a importação de uma biblioteca (semelhante aos imorts do C) -->
+	<!-- precisamos importar o 'h' do JSF pois vamos manpular as tags, de forma que não é possivel com HTML puro -->
+	
+	<h:head>
+		<title>Argentum</title>
+	</h:head>
+	
+	
+		<!-- o JSF usa as classes anotadas com @ManagedBean. -->
+		<!-- para retornar dados destas classe usamos uma Expression Language (hashtag e chaves)
+			e dentro dela usamos um objeto (oiMundoBean) e seu getter (mensagem) -->
+	<h:body>
+		<h:form>
+			<h:outputText value="#{oiMundoBean.mensagem}" /> <!-- aqui estamos usando o getMensagem() de OiMundoBean -->
+			<br />
+			<h:inputText value="#{oiMundoBean.nome}" /> <!-- aqui estamos usando o setter setNome() de OiMundoBean -->
+			<h:commandButton value="OK" action="#{oiMundoBean.nomeFoiDigitado}" /> <!-- este botão executará o metodo especificado em action quando for clicado -->
+		</h:form>
+	</h:body>
+
+</html>

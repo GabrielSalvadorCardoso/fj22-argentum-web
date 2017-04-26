@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<!-- delcarando os namespaces -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<title>Argentum Web</title>
+	</h:head>
+	
+	<h:body>
+		<!-- para que os botões funcionem é necessario que eles estejam dentro de um form -->
+		<h:form>
+			<!-- adicionando o panalGrid faz com que os elementos do form fiquem na mesma linha -->
+			<h:panelGrid columns="8">
+			
+				<h:outputLabel value="Media Movel:" />
+				<!-- quando o primeiro selectItem for clicado, o valoe "MediaMovelSimple" será armazenado no atributo 'nomeMedia' de ArgentumBean -->
+				<p:selectOneButton value="#{argentumBean.nomeMedia}">
+					<f:selectItem itemLabel="Simples" itemValue="MediaMovelSimples" />
+					<f:selectItem itemLabel="Ponderada" itemValue="MediaMovelPonderada" />
+				</p:selectOneButton>
+				
+				<h:outputLabel value="Indicador base:" />
+				<p:selectOneButton value="#{argentumBean.nomeIndicadorBase}">
+					<f:selectItem itemLabel="Abertura" itemValue="IndicadorAbertura" />
+					<f:selectItem itemLabel="Fechamento" itemValue="IndicadorFechamento" />
+				</p:selectOneButton>
+			
+				<!-- o atrubuto update serve para indicar qual componente deve ser atualizado quando o botão for clicado, usando o id do componente -->
+				<p:commandButton value="Gerar Grafico" update=":grafico" action="#{argentumBean.gerarGrafico}" />				
+			</h:panelGrid>
+		</h:form>
+	
+		<!-- cria um grafico de linha usando ArgentumBean como classe de modelo -->
+		<p:chart id="grafico" type="line" model="#{argentumBean.modeloGrafico}"/>
+	
+		<!-- o JSF usa automaticamente o metodo POST para o form -->
+		<h:form id="listaNegociacao">
+			<!-- dataTable funciona como um forEach var='variavel que recebera cada elemento da lista' value='a lista' -->
+			<p:dataTable var="negociacao" value="#{argentumBean.negociacoes}" paginator="true" rows="15">
+			<!-- o atributo 'paginator' habilita a paginação para o dataTable e o atributo 'rows' diz quantas linhas terão por pagina-->
+			
+				<!-- cada coluna dentro de uma dataTable é representada pela tag p:column -->
+				<!-- o atributo headerText de column configura um titulo para a coluna -->
+				<p:column sortBy="#{negociacao.preco}" headerText="Preço">
+					<!-- usamos um outputText chamando getPreco() da negociacao para mostrar o dado -->
+					<h:outputText value="#{negociacao.preco}" />
+				</p:column>
+				
+				<!-- o atributo 'sortBy' indica por qual atributo do ManagedBean a coluna deve ser ordenada -->
+				<p:column sortBy="#{negociacao.quantidade}" headerText="Quantidade">
+					<h:outputText value="#{negociacao.quantidade}" />
+				</p:column>
+				
+				<p:column sortBy="#{negociacao.volume}" headerText="Volume">
+					<h:outputText value="#{negociacao.volume}" />
+				</p:column>
+				
+				<p:column sortBy="#{negociacao.data}" headerText="Data">
+					<h:outputText value="#{negociacao.data.time}" >
+						<!-- f:convertDateTime converte a data para o formato especificado em pattern -->
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						<!-- quando usamos um convertDateTime para um outputText precisamos abri-lo antes da tag de conversão e fechar depois dela-->
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</h:form><!-- para permitir a ordenação das colunas devemos colocar a tabela dentro de um form -->
+	</h:body>
+</html>
